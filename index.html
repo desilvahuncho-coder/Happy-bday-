@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday, Beautiful! 💙</title>
+    <style>
+        :root {
+            --bg-color: #e3edff;
+            --card-bg: #ffffff;
+            --text-color: #3b5998;
+            --accent-color: #7fa9fa;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Slide Container Setup */
+        .container {
+            width: 90%;
+            max-width: 600px;
+            height: 500px;
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            opacity: 0;
+            transform: scale(0.9) translateY(20px);
+            pointer-events: none;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 4px solid #fff;
+            outline: 2px dashed var(--accent-color);
+            outline-offset: -10px;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            pointer-events: auto;
+        }
+
+        /* Floating Decorative Elements */
+        .decorations {
+            position: absolute;
+            font-size: 24px;
+            animation: float 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-10px); }
+        }
+
+        /* Typography & Buttons */
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(127, 169, 250, 0.4);
+            transition: 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(127, 169, 250, 0.6);
+        }
+
+        /* Slide 1: Envelope Specifics */
+        .envelope {
+            width: 120px;
+            height: 80px;
+            background: var(--accent-color);
+            border-radius: 0 0 10px 10px;
+            position: relative;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .envelope::before {
+            content: '';
+            position: absolute;
+            top: -60px;
+            left: 0;
+            border-left: 60px solid transparent;
+            border-right: 60px solid transparent;
+            border-bottom: 60px solid var(--accent-color);
+        }
+
+        /* Slide 2: Gift grid */
+        .gift-container {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .gift-box {
+            font-size: 50px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .gift-box:hover {
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        /* Slide 3: Interactive Grid / Cake */
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            width: 100%;
+            margin-top: 15px;
+        }
+        .bubble {
+            background: #f0f5ff;
+            padding: 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-left: 4px solid var(--accent-color);
+        }
+        .cake-img {
+            font-size: 60px;
+            grid-column: span 2;
+            margin: 10px 0;
+            animation: bounce 2s infinite;
+        }
+
+        /* Slide 4: Letter Style */
+        .letter-paper {
+            background: #fffdf0;
+            border: 1px solid #f3e5ab;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: left;
+            background-image: linear-gradient(#e1e9ff 1px, transparent 1px);
+            background-size: 100% 2em;
+            line-height: 2em;
+            padding-top: 2em;
+            color: #4a5568;
+        }
+
+        /* Slide 5: Vinyl Record / Music Player */
+        .vinyl-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 15px;
+        }
+        .vinyl {
+            width: 100%;
+            height: 100%;
+            background: #222;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 10px double #444;
+            animation: spin 4s linear infinite;
+        }
+        .vinyl-center {
+            width: 40px;
+            height: 40px;
+            background: var(--accent-color);
+            border-radius: 50%;
+        }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- Slide 1: Welcome -->
+        <div class="slide active" id="slide-1">
+            <div class="decorations" style="top:20px; left:20px;">💙</div>
+            <div class="decorations" style="bottom:30px; right:30px;">✨</div>
+            <h1>Happy Birthday, Baby!</h1>
+            <p>You have a special delivery waiting for you...</p>
+            <div class="envelope" onclick="nextSlide(2)"></div>
+        </div>
+
+        <!-- Slide 2: Choose a Gift -->
+        <div class="slide" id="slide-2">
+            <h1>Click to open your presents!</h1>
+            <p>Hope you like them, hehe 🥰</p>
+            <div class="gift-container">
+                <div class="gift-box" onclick="nextSlide(3)">🎁</div>
+                <div class="gift-box" onclick="nextSlide(3)">🎁</div>
+                <div class="gift-box" onclick="nextSlide(3)">🎁</div>
+            </div>
+        </div>
+
+        <!-- Slide 3: The Cake & Little Truths -->
+        <div class="slide" id="slide-3">
+            <h2>Your Birthday Cake 🎂</h2>
+            <div class="cake-img">🎂</div>
+            <div class="grid-layout">
+                <div class="bubble">I will always love you no matter what.</div>
+                <div class="bubble">You will forever be my only option.</div>
+                <div class="bubble">You are the best part of my life.</div>
+                <div class="bubble">I can't imagine a life without you in it.</div>
+            </div>
+            <button class="btn" style="margin-top: 20px;" onclick="nextSlide(4)">Click Me!</button>
+        </div>
+
+        <!-- Slide 4: Letter from the Heart -->
+        <div class="slide" id="slide-4">
+            <h2>Words from my Heart ✍️</h2>
+            <div class="letter-paper">
+                <p><strong>Happiest birthday, baby!</strong></p>
+                <!-- REPLACE THE PARAGRAPH BELOW WITH YOUR REFINED STATEMENT -->
+                <p>You make my life so meaningful and I am so incredibly lucky to have you. I love you wholeheartedly and I can't wait to continue loving you for the rest of my days. You are literally the most beautiful girl I know. Always, Forever. 💙</p>
+            </div>
+            <button class="btn" style="margin-top: 15px;" onclick="nextSlide(5)">Next Surprise</button>
+        </div>
+
+        <!-- Slide 5: Final Music Slide -->
+        <div class="slide" id="slide-5">
+            <h2>A Song For You 🎵</h2>
+            <div class="vinyl-container">
+                <div class="vinyl"><div class="vinyl-center"></div></div>
+            </div>
+            <p>Scan or click below to play our song!</p>
+            
+            <!-- You can add a link to your Spotify song playlist here -->
+            <button class="btn" onclick="window.open('https://open.spotify.com', '_blank')">🎵 Listen Now</button>
+            <p style="font-size: 0.8rem; margin-top: 15px; cursor: pointer; color: #aaa;" onclick="nextSlide(1)">Click to restart!</p>
+        </div>
+
+    </div>
+
+    <script>
+        function nextSlide(slideNumber) {
+            // Remove active class from all slides
+            document.querySelectorAll('.slide').forEach(slide => {
+                slide.classList.remove('active');
+            });
+            // Add active class to target slide
+            document.getElementById(`slide-${slideNumber}`).classList.add('active');
+        }
+    </script>
+</body>
+</html>
