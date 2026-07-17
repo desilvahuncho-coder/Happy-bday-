@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HBD Safa! 🎂</title>
+    <style>
+        :root {
+            --bg-color: #0f111a;
+            --card-bg: #fffcf2;
+            --text-dark: #2b2d42;
+            --accent-pink: #ff6b8b;
+            --accent-blue: #4a90e2;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        /* Polka Dot Background Graphic */
+        .dot-matrix {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.15) 2px, transparent 2px);
+            background-size: 30px 30px;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Main Viewport Container */
+        .app-viewport {
+            width: 100vw;
+            height: 100vh;
+            max-width: 440px;
+            position: relative;
+            z-index: 5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Intro & Interactive Prompt Cards */
+        .interactive-card {
+            background: var(--card-bg);
+            color: var(--text-dark);
+            padding: 30px 20px;
+            border-radius: 24px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            width: 100%;
+            display: none;
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .interactive-card.active {
+            display: block;
+        }
+
+        .prompt-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            line-height: 1.4;
+        }
+
+        /* Scrapbook-style Sticker Buttons */
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .sticker-btn {
+            background: #fff;
+            color: var(--text-dark);
+            border: 3px solid var(--text-dark);
+            padding: 12px 30px;
+            font-size: 1.2rem;
+            font-weight: 800;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px var(--text-dark);
+            transition: all 0.1s ease;
+        }
+
+        .sticker-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px var(--text-dark);
+        }
+
+        .sticker-btn.primary {
+            background: #eef1ff;
+        }
+
+        /* Scrollable Main Board Content */
+        .main-dashboard {
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            gap: 25px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .main-dashboard.active {
+            display: flex;
+        }
+
+        /* Content Blocks */
+        .board-card {
+            background: var(--card-bg);
+            color: var(--text-dark);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .center-heading {
+            text-align: center;
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+        }
+
+        .sticker-img {
+            width: 100%;
+            max-height: 260px;
+            object-fit: contain;
+            border-radius: 12px;
+            margin: 15px 0;
+        }
+
+        /* List Items: Things I Love Section */
+        .love-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            list-style: none;
+        }
+
+        .love-item {
+            background: #fff;
+            border: 2px solid #e2e8f0;
+            padding: 14px 16px;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+
+        .love-item::before {
+            content: "✨";
+        }
+
+        /* Heartfelt Letter Layout */
+        .letter-text {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: #333;
+        }
+
+        .letter-text p {
+            margin-bottom: 12px;
+        }
+
+        /* Custom Scrollbar styling for smooth reading */
+        .main-dashboard::-webkit-scrollbar {
+            width: 6px;
+        }
+        .main-dashboard::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dot-matrix"></div>
+
+    <!-- Background Audio Track Handler -->
+    <audio id="bg-music" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="app-viewport">
+
+        <!-- Screen 1: Initial Question -->
+        <div class="interactive-card active" id="node-start">
+            <div class="prompt-text">Do you want to see what I've prepared for you? 🤔</div>
+            <div class="btn-group">
+                <button class="sticker-btn primary" onclick="handleChoice('yay')">Yay!</button>
+                <button class="sticker-btn" onclick="handleChoice('nay1')">Nay!</button>
+            </div>
+        </div>
+
+        <!-- Screen 2: Nay Loop Detour A -->
+        <div class="interactive-card" id="node-nay1">
+            <div class="prompt-text">Noooooo!<br>You're gonna love it! 🥺</div>
+            <img src="flork.png" class="sticker-img" alt="Protest Cat">
+            <div class="btn-group" style="margin-top: 15px;">
+                <button class="sticker-btn primary" onclick="handleChoice('yay')">Fine, Yay! ✨</button>
+                <button class="sticker-btn" onclick="handleChoice('nay2')">Still No</button>
+            </div>
+        </div>
+
+        <!-- Screen 3: Nay Loop Detour B -->
+        <div class="interactive-card" id="node-nay2">
+            <div class="prompt-text">Try again, pwees! 💕</div>
+            <div class="btn-group">
+                <button class="sticker-btn primary" onclick="handleChoice('yay')">Okay, Yay! 🎉</button>
+            </div>
+        </div>
+
+        <!-- Screen 4: Main Scrollable Present Board -->
+        <div class="main-dashboard" id="main-board">
+            
+            <!-- Block 1: Birthday Header & Cake Cat -->
+            <div class="board-card" style="background: linear-gradient(135deg, #fffcf2 0%, #fff5f5 100%);">
+                <h1 class="center-heading" style="color: var(--accent-pink);">Happy Birthday Safa! 🎂</h1>
+                <img src="party-cat.png" class="sticker-img" alt="Party Birthday Cat">
+                <p style="text-align: center; font-weight: 700; color: #555;">Time to blow out the candles and make a wish!</p>
+            </div>
+
+            <!-- Block 2: Things I Love About You List -->
+            <div class="board-card">
+                <h2 class="center-heading" style="color: var(--accent-blue);">Things I Love About You</h2>
+                <ul class="love-list">
+                    <li class="love-item">Your beautiful smile that fixes my worst days.</li>
+                    <li class="love-item">The way you completely understand me without trying.</li>
+                    <li class="love-item">How safe and peaceful you make me feel when we talk.</li>
+                    <li class="love-item">Your incredible energy and the amazing person you are.</li>
+                    <li class="love-item">The pure happiness brought by every single memory we build.</li>
+                </ul>
+            </div>
+
+            <!-- Block 3: Chill Cat Visual Break -->
+            <div class="board-card" style="background: #1a1c23; color: #fff; text-align: center;">
+                <img src="chill-cat.png" class="sticker-img" alt="Main Character Cat">
+                <p style="font-weight: 600; font-size: 1.1rem; color: #cbd5e1;">Me watching you absolute kill it as the main character today:</p>
+            </div>
+
+            <!-- Block 4: Core Heartfelt Letter -->
+            <div class="board-card" style="margin-bottom: 20px;">
+                <h2 class="center-heading" style="border-bottom: 2px dashed #e2e8f0; padding-bottom: 10px; margin-bottom: 15px;">To Safa 📜</h2>
+                <div class="letter-text">
+                    <p><strong>Hey Safa,</strong></p>
+                    <p>I know being apart on days like this isn't the easiest thing in the world, and it can make the physical distance feel a whole lot bigger. But I want you to remember that no matter how many miles separate us, you are always right here with me.</p>
+                    <p>You bring so much genuine light, warmth, and meaning into my life. I count myself incredibly lucky to have you, and I love you wholeheartedly. I cannot wait to keep cheering you on and making memories together for all the years ahead.</p>
+                    <p>You are easily the most beautiful girl in the world. Enjoy your absolute special day! 💙</p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        function handleChoice(action) {
+            // Unload all active input elements smoothly
+            document.querySelectorAll('.interactive-card').forEach(card => {
+                card.classList.remove('active');
+            });
+
+            if (action === 'yay') {
+                // Initialize background audio file on user confirmation
+                const audio = document.getElementById('bg-music');
+                audio.play().catch(e => console.log("Audio waiting for system permissions"));
+                
+                // Show core birthday presentation workspace
+                document.getElementById('main-board').classList.add('active');
+            } else if (action === 'nay1') {
+                document.getElementById('node-nay1').classList.add('active');
+            } else if (action === 'nay2') {
+                document.getElementById('node-nay2').classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>
