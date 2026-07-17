@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday, Beautiful! 🌌</title>
+    <style>
+        :root {
+            --wrap-blue: #00d2ff;
+            --wrap-pink: #ff007f;
+            --space-bg: #050515;
+            --card-bg: #ffffff;
+            --text-main: #111122;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Avenir Next', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--space-bg);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Full Screen Slide Management */
+        .story-container {
+            width: 100vw;
+            height: 100vh;
+            max-width: 480px; /* Perfect mobile aspect ratio */
+            max-height: 850px;
+            position: relative;
+            background: #000;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        /* Top Progress Bar - Spotify Wrapped Style */
+        .progress-container {
+            position: absolute;
+            top: 15px;
+            left: 10px;
+            right: 10px;
+            display: flex;
+            gap: 5px;
+            z-index: 100;
+        }
+        .bar {
+            height: 3px;
+            flex: 1;
+            background: rgba(255,255,255,0.3);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .bar-fill {
+            height: 100%;
+            width: 0%;
+            background: #fff;
+            transition: width 0.1s linear;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Tap Targets for navigation */
+        .tap-left, .tap-right {
+            position: absolute;
+            top: 0;
+            width: 25%;
+            height: 100%;
+            z-index: 90;
+            cursor: pointer;
+        }
+        .tap-left { left: 0; }
+        .tap-right { right: 0; width: 75%; } /* Favor moving forward */
+
+        /* Slide 1: Welcome (Wrapped Flashy Style) */
+        #slide-1 {
+            background: linear-gradient(135deg, var(--wrap-blue), var(--wrap-pink));
+        }
+        .wrapped-title {
+            font-size: 3rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            line-height: 1;
+            margin-bottom: 20px;
+            animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Slide 2: Constellation / Space Deep Dive */
+        #slide-2 {
+            background: radial-gradient(circle at center, #101535 0%, var(--space-bg) 100%);
+        }
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="10" cy="20" r="1" fill="white" opacity="0.8"/><circle cx="70" cy="60" r="1.5" fill="white" opacity="0.9"/><circle cx="45" cy="80" r="0.8" fill="white" opacity="0.5"/></svg>') repeat;
+            animation: passBy 60s linear infinite;
+        }
+        .constellation {
+            width: 200px;
+            height: 200px;
+            border: 1px dashed rgba(255,255,255,0.2);
+            border-radius: 50%;
+            position: relative;
+            margin: 20px 0;
+        }
+        .star-node {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #fff;
+        }
+
+        /* Slide 3 & 4: Memes and Cards */
+        #slide-3 { background: #fff; color: var(--text-main); }
+        #slide-4 { background: #fffdf0; color: var(--text-main); }
+
+        .meme-img {
+            width: 85%;
+            max-width: 300px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            margin-bottom: 20px;
+        }
+
+        .letter-content {
+            background-image: linear-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 100% 2.5em;
+            line-height: 2.5em;
+            text-align: left;
+            padding: 10px;
+            font-size: 1.1rem;
+        }
+
+        /* Interactive Elements */
+        .pulse-btn {
+            background: #fff;
+            color: #000;
+            padding: 15px 35px;
+            border-radius: 50px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255,255,255,0.3);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        @keyframes passBy { from { background-position: 0 0; } to { background-position: 0 1000px; } }
+        @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <!-- Hidden Spotify player handling Justin Bieber's "Die For You" -->
+    <div style="display:none;">
+        <iframe id="spotify-player" src="https://open.spotify.com/embed/track/6I3mqTwhRpn34SLVafSH7G?utm_source=generator" width="100%" height="80" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+    </div>
+
+    <!-- Background Audio Fallback (Highly Recommended because browsers block iframe auto-plays until click) -->
+    <audio id="bg-music" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="story-container">
+        
+        <!-- Interactive Taps -->
+        <div class="tap-left" onclick="navigateStory(-1)"></div>
+        <div class="tap-right" onclick="navigateStory(1)"></div>
+
+        <!-- Progress Bars -->
+        <div class="progress-container">
+            <div class="bar"><div class="bar-fill" id="fill-1"></div></div>
+            <div class="bar"><div class="bar-fill" id="fill-2"></div></div>
+            <div class="bar"><div class="bar-fill" id="fill-3"></div></div>
+            <div class="bar"><div class="bar-fill" id="fill-4"></div></div>
+        </div>
+
+        <!-- Slide 1: Main Landing -->
+        <div class="slide active" id="slide-1">
+            <div class="wrapped-title">Your<br>2026<br>Wrapped</div>
+            <p style="font-weight: 500; margin-bottom: 30px;">A special review prepared just for you.</p>
+            <button class="pulse-btn" onclick="startShow()">Tap to Open 💙</button>
+        </div>
+
+        <!-- Slide 2: Cosmic Space / Constellations -->
+        <div class="slide" id="slide-2">
+            <div class="stars"></div>
+            <h2 style="font-size: 2rem; z-index: 2; margin-bottom: 10px;">Even Across Galaxies...</h2>
+            <p style="color: var(--wrap-blue); z-index: 2; font-weight: bold;">No amount of distance could change us.</p>
+            
+            <div class="constellation" style="z-index: 2;">
+                <!-- Little custom star arrangement connecting you both -->
+                <div class="star-node" style="top: 20%; left: 30%;"></div>
+                <div class="star-node" style="top: 40%; left: 70%;"></div>
+                <div class="star-node" style="top: 80%; left: 45%;"></div>
+                <svg width="100%" height="100%" style="stroke: rgba(255,255,255,0.15); stroke-width: 1; stroke-dasharray: 4;">
+                    <line x1="60" y1="40" x2="140" y2="80" />
+                    <line x1="140" y1="80" x2="90" y2="160" />
+                </svg>
+            </div>
+            <p style="font-size: 0.9rem; opacity: 0.7; z-index: 2;">Tap right to flip card</p>
+        </div>
+
+        <!-- Slide 3: Fun Cat Meme Birthday Moment -->
+        <div class="slide" id="slide-3">
+            <h2 style="margin-bottom: 15px; font-weight: 800; color: var(--wrap-pink);">Mood Today:</h2>
+            <!-- Placeholder for your crazy cat birthday image -->
+            <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=500" class="meme-img" alt="Birthday Cat">
+            <p style="font-weight: 600;">Happiest Birthday, Baby! You are my absolute favorite person. 🥳</p>
+        </div>
+
+        <!-- Slide 4: Pure Confession / Statement -->
+        <div class="slide" id="slide-4">
+            <h2 style="margin-bottom: 20px; color: #1e293b;">From Me to You ✍️</h2>
+            <div class="letter-content">
+                <p>You make my life so meaningful and I am so incredibly lucky to have you. I love you wholeheartedly and I can't wait to continue loving you for the rest of my days. You are literally the most beautiful girl I know. Always, Forever. 💙</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 4;
+        let slideInterval;
+
+        function startShow() {
+            // Unlocks music timeline instantly when she interacts
+            const audio = document.getElementById('bg-music');
+            audio.play().catch(e => console.log("Audio play blocked or embed handling loaded."));
+            navigateStory(1);
+        }
+
+        function navigateStory(direction) {
+            // Handle limits
+            if (currentSlide === 1 && direction === -1) return;
+            
+            // Clear prior intervals 
+            clearInterval(slideInterval);
+
+            // Update indices
+            document.getElementById(`slide-${currentSlide}`).classList.remove('active');
+            
+            currentSlide += direction;
+            
+            if (currentSlide > totalSlides) {
+                currentSlide = totalSlides; // Stop at last slide or loop back
+                // To stop music cleanly at final screen:
+                document.getElementById('bg-music').pause();
+                alert("I love you to the moon and back! Happy Birthday! 🎉");
+                return;
+            }
+
+            document.getElementById(`slide-${currentSlide}`).classList.add('active');
+            updateProgressBars();
+        }
+
+        function updateProgressBars() {
+            for (let i = 1; i <= totalSlides; i++) {
+                const fill = document.getElementById(`fill-${i}`);
+                if (i < currentSlide) {
+                    fill.style.width = '100%';
+                } else if (i === currentSlide) {
+                    fill.style.width = '0%';
+                    // Animate current active progress bar over 6 seconds like Spotify stories
+                    let width = 0;
+                    slideInterval = setInterval(() => {
+                        if (width >= 100) {
+                            clearInterval(slideInterval);
+                            navigateStory(1); // Auto advance
+                        } else {
+                            width += 1.67; // approx matches 6000ms updates
+                            fill.style.width = width + '%';
+                        }
+                    }, 100);
+                } else {
+                    fill.style.width = '0%';
+                }
+            }
+        }
+    </script>
+</body>
+</html>
